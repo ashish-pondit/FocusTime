@@ -5,8 +5,10 @@ import {FocusInput} from './component/FocusInput';
 import CountDown from './CountDown';
 import RoundButton from './RoundButton';
 import TimeSelect from './TimeSelect';
+import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
 const TimerPage = ({task}) => {
+  useKeepAwake();
   const [minutes, setminutes] = useState(0.1);
   const [started, setstarted] = useState(true);
 
