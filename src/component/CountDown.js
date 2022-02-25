@@ -9,7 +9,7 @@ function toMilliseconds(time) {
 function formatTime(t) {
   return t < 10 ? '0' + t : t;
 }
-const CountDown = ({minutes = 20, isPaused}) => {
+const CountDown = ({minutes = 20, isPaused, onEnd}) => {
   const interval = useRef(null);
   const [millis, setmillis] = useState(toMilliseconds(minutes));
   const minute = Math.floor(millis / 1000 / 60) % 60;
@@ -18,6 +18,8 @@ const CountDown = ({minutes = 20, isPaused}) => {
   const countTimer = () => {
     setmillis(time => {
       if (time == 0) {
+        clearInterval(interval.current);
+        onEnd();
         return time;
       }
 

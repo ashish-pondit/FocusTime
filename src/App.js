@@ -17,7 +17,7 @@ const App = () => {
       {!input ? (
         <FocusInput inputText={inputField} />
       ) : (
-        <TimerPage task={input} />
+        <TimerPage task={input} inputText={inputField} />
       )}
     </View>
   );

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Vibration, Platform} from 'react-native';
 import {font, color, spacing} from '../utils/utility';
 import {FocusInput} from './component/FocusInput';
 import CountDown from './CountDown';
@@ -7,7 +7,7 @@ import RoundButton from './RoundButton';
 import TimeSelect from './TimeSelect';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
-const TimerPage = ({task}) => {
+const TimerPage = ({task, inputText}) => {
   useKeepAwake();
   const [minutes, setminutes] = useState(0.1);
   const [started, setstarted] = useState(true);
@@ -17,10 +17,36 @@ const TimerPage = ({task}) => {
     setstarted(false);
   };
 
+  const ONE_SECOND_IN_MS = 1000;
+
+  const PATTERN = [
+    1 * ONE_SECOND_IN_MS,
+    1 * ONE_SECOND_IN_MS,
+    1 * ONE_SECOND_IN_MS,
+  ];
+
+  const vibrate = () => {
+    if (Platform.OS === 'ios') {
+      const interval = setInterval(() => Vibration.vibrate(), 1000);
+      setTimeout(() => clearInterval(interval), 10000);
+    } else {
+      // Vibration.vibrate(PATTERN);
+      const interval = setInterval(() => Vibration.vibrate(), 1000);
+      setTimeout(() => clearInterval(interval), 6000);
+    }
+  };
+
+  const onEnd = () => {
+    vibrate();
+    setminutes(1);
+    setstarted(false);
+    inputText(null);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.countdownFrame}>
-        <CountDown minutes={minutes} isPaused={!started} />
+        <CountDown minutes={minutes} isPaused={!started} onEnd={onEnd} />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.headding}>Focusing on:</Text>
