@@ -7,7 +7,7 @@ import RoundButton from './RoundButton';
 import TimeSelect from './TimeSelect';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
-const TimerPage = ({task, inputText}) => {
+const TimerPage = ({task, onTimerEnd, clearInput}) => {
   useKeepAwake();
   const [minutes, setminutes] = useState(0.1);
   const [started, setstarted] = useState(true);
@@ -17,30 +17,22 @@ const TimerPage = ({task, inputText}) => {
     setstarted(false);
   };
 
-  const ONE_SECOND_IN_MS = 1000;
-
-  const PATTERN = [
-    1 * ONE_SECOND_IN_MS,
-    1 * ONE_SECOND_IN_MS,
-    1 * ONE_SECOND_IN_MS,
-  ];
-
   const vibrate = () => {
     if (Platform.OS === 'ios') {
       const interval = setInterval(() => Vibration.vibrate(), 1000);
       setTimeout(() => clearInterval(interval), 10000);
     } else {
       // Vibration.vibrate(PATTERN);
-      const interval = setInterval(() => Vibration.vibrate(), 1000);
-      setTimeout(() => clearInterval(interval), 6000);
+      // const interval = setInterval(() => Vibration.vibrate(), 1000);
+      // setTimeout(() => clearInterval(interval), 6000);
     }
   };
 
   const onEnd = () => {
-    vibrate();
+    // vibrate();
     setminutes(1);
     setstarted(false);
-    inputText(null);
+    onTimerEnd();
   };
 
   return (
@@ -78,6 +70,16 @@ const TimerPage = ({task, inputText}) => {
           }}
         />
       )}
+
+      <RoundButton
+        size={70}
+        style={styles.cancelBtn}
+        title="-"
+        font={35}
+        onPress={() => {
+          clearInput();
+        }}
+      />
     </View>
   );
 };
@@ -115,7 +117,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderWidth: 2,
     position: 'relative',
-    top: 100,
+    top: 50,
+  },
+  cancelBtn: {
+    borderRadius: 100,
+    // alignSelf: 'center',
+    borderWidth: 2,
+    position: 'absolute',
+    left: 20,
+    bottom: 20,
   },
   timeBtnWraper: {
     alignItems: 'center',

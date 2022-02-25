@@ -22,4 +22,6 @@ export const color = {
   secondary: '#A6E3E9',
   black: 'black',
   white: 'white',
+  alert: '#B33030',
+  success: '#357C3C',
 };

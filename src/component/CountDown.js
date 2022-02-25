@@ -19,7 +19,7 @@ const CountDown = ({minutes = 20, isPaused, onEnd}) => {
     setmillis(time => {
       if (time == 0) {
         clearInterval(interval.current);
-        onEnd();
+        // onEnd();
         return time;
       }
 
@@ -27,6 +27,14 @@ const CountDown = ({minutes = 20, isPaused, onEnd}) => {
       return timeLeft;
     });
   };
+
+  useEffect(() => {
+    if (millis == 0) {
+      console.log('what the hell');
+      onEnd();
+    }
+    console.log('what the hell 2222');
+  }, [millis]);
 
   useEffect(() => {
     setmillis(toMilliseconds(minutes));
