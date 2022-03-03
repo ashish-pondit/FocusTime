@@ -4,6 +4,7 @@ import {FocusInput} from './component/FocusInput';
 import TimerPage from './component/TimerPage';
 import FocusHistory from './component/FocusHistory';
 import {color, font, spacing} from './utils/utility';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const App = () => {
   // console.log('application started');
@@ -14,9 +15,43 @@ const App = () => {
     setitems([...items, {topic: inputTopic, status: status}]);
   };
 
+  const saveFocusHistory = async () => {
+    try {
+      await AsyncStorage.setItem('bb', JSON.stringify(items));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('@MySuperStore:key', 'I like to save it.');
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+  loadFocusHistory = async () => {
+    try {
+      const savedData = await AsyncStorage.getItem('bb');
+      if (savedData && JSON.parse(savedData).length) {
+        setitems(JSON.parse(savedData));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    loadFocusHistory();
+  }, []);
+
+  useEffect(() => {
+    saveFocusHistory();
+  }, [items]);
+
   const inputField = text => {
     setInput(text);
-    console.log(text);
   };
 
   const onClear = () => {
